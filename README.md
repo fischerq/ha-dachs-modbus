@@ -1,14 +1,14 @@
-# Braiins Pool Home Assistant Integration
+# ha-dachs-modbus - Template Home Assistant Integration for ModbusTCP Devices
 
-Monitor your Braiins Pool mining statistics directly within Home Assistant. 
+This repository provides a template for creating a Home Assistant integration to control and monitor devices using ModbusTCP.
 
 ## Setup
 
-1.  **Obtain your API key for the Braiins Pool API.**\
-    Follow the instructions in the Braiins Pool API documentation: [https://academy.braiins.com/en/braiins-pool/monitoring/#overview](https://academy.braiins.com/en/braiins-pool/monitoring/#overview)
-1.  **Install the Integration.**\
+1.  **Configure your ModbusTCP device.**\
+    Ensure your device is accessible on your network via ModbusTCP and note its IP address and port.
+1.  **Install the Integration (Template).**\
     This integration is available through HACS (Home Assistant Community Store). Click the following button to add it to your Home Assistant: \
-    [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=braiins_pool)\
+    [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=dachs_modbus)\
     \
     Alternatively add it manually with the following steps:
     1.  **Add this repository as a Custom Repository in HACS.**
@@ -16,33 +16,28 @@ Monitor your Braiins Pool mining statistics directly within Home Assistant.
         *   Click on the three dots in the top right corner and select `Custom repositories`.
         *   Enter the URL of this repository (`https://github.com/fischerq/ha-braiins-pool/`) and select the category `Integration`.
         *   Click `Add`.
-    1.  **Install the integration.**
+    1.  **Install the integration (Template).**
         *   Search for "Braiins Pool" in the HACS Integrations tab.
         *   Click "Download" and restart Home Assistant.
-1.  **Add the Braiins Pool integration.**
+1.  **Add the Modbus TCP Device (Template) integration.**
     *   Go to Settings -> Devices & Services -> Add Integration.
-    *   Search for Braiins Pool` and select it.
-    *   Enter your Braiins Pool API Key when prompted. Also enter the name of your Braiins Pool Reward Account (for display, not used for anything else yet).
+    *   Search for "Modbus TCP Device (Template)" and select it.
+    *   Follow the configuration flow to set up your device.
 
 ## Provided Entities
 
-This integration will create sensors for:
-
-*   `today_reward`: Braiins Pool Today's Reward
-    *   Also available as `today_reward_satoshi`: Braiins Pool Today's Reward Satoshi
-*   `current_balance`: Braiins Pool Current Balance
-    *   Also available as `current_balance_satoshi`: Braiins Pool Current Balance Satoshi
-*   `all_time_reward`: Braiins Pool All Time Reward
-    *   Also available as `all_time_reward_satoshi`: Braiins Pool All Time Reward Satoshi
-*   `pool_5m_hash_rate`: Braiins Pool 5m Hash Rate
-*   `ok_workers`: Braiins Pool Active Workers
-
+This template provides examples for creating sensor entities. You will need to define the specific entities for your ModbusTCP device.
 ## Implementation
 
-Interaction with the Braiins Pool API is implemented in `api.py`.
-
-Sensors are populated by parsing the [User Profile API](https://academy.braiins.com/en/braiins-pool/monitoring/#user-profile-api) endpoint.
-
-Fetching or parsing the other API endpoints is not implemented yet. Feel free to contribute if you need it.
-
- Providing the data to Home Assistant in the correct format is implemented in `coordinator.py` and `sensor.py`. `config_flow.py` holds the configuration dialog.
+The files in `/custom_components/dachs_modbus/` provide the basic structure for a Home Assistant integration. You will need to modify these files to implement the specific functionality for your ModbusTCP device:
+\
+*   `__init__.py`: Integration entry point and setup.\
+*   `api.py`: Placeholder for ModbusTCP communication.\
+*   `config_flow.py`: Handles user configuration.\
+*   `const.py`: Defines constants.\
+\
+*   `coordinator.py`: Manages data updates.\
+\
+*   `manifest.json`: Integration metadata.\
+\
+*   `sensor.py`: Example sensor entity creation.

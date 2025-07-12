@@ -1,15 +1,14 @@
-"""The Braiins Pool integration."""
+"""The modbus_template integration."""
 
 from datetime import timedelta
 import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .coordinator import BraiinsDataUpdateCoordinator
-from .api import BraiinsPoolApiClient
-from .const import DOMAIN, CONF_API_KEY, DEFAULT_SCAN_INTERVAL_MINS
+from .coordinator import ModbusTemplateDataUpdateCoordinator
+from .modbus_api import ModbusApiClient
+from .const import DOMAIN, DEFAULT_SCAN_INTERVAL_SECS
 
 _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(minutes=DEFAULT_SCAN_INTERVAL_MINS)
@@ -17,13 +16,11 @@ SCAN_INTERVAL = timedelta(minutes=DEFAULT_SCAN_INTERVAL_MINS)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Braiins Pool from a config entry."""
-    hass.data.setdefault(DOMAIN, {})
-    api_key = entry.data[CONF_API_KEY]
+ hass.data.setdefault(DOMAIN, {})
 
-    session = async_get_clientsession(hass)
-    api_client = BraiinsPoolApiClient(session, api_key)
+ api_client = ModbusApiClient(hass, entry.data)
 
-    coordinator = BraiinsDataUpdateCoordinator(
+ coordinator = ModbusTemplateDataUpdateCoordinator(
         hass,
         api_client=api_client,
         update_interval=SCAN_INTERVAL,

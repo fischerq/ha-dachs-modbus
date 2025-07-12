@@ -1,5 +1,6 @@
 pytest
 aiohttp
+pymodbus
 pytest-asyncio
 homeassistant
 pytest-homeassistant-custom-component
