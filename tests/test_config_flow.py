@@ -4,20 +4,20 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
-from homeassistant.const import CONF_API_KEY
+from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.data_entry_flow import FlowResultType
 
-from custom_components.braiins_pool.const import DOMAIN, CONF_REWARDS_ACCOUNT_NAME
+from custom_components.dachs_modbus.const import DOMAIN
 
-MOCK_API_KEY = "test_api_key_123"
-MOCK_REWARDS_ACCOUNT_NAME = "My Test Account"
+MOCK_HOST = "1.2.3.4"
+MOCK_PORT = 502
 
 
 @pytest.fixture(autouse=True)
 def mock_setup_entry():
     """Mock async_setup_entry to bypass actual setup."""
     with patch(
-        "custom_components.braiins_pool.async_setup_entry", return_value=True
+        "custom_components.dachs_modbus.async_setup_entry", return_value=True
     ) as mock_setup:
         yield mock_setup
 
@@ -35,77 +35,43 @@ async def test_config_flow_user_step(hass: HomeAssistant):
     result2 = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         {
-            CONF_API_KEY: MOCK_API_KEY,
-            CONF_REWARDS_ACCOUNT_NAME: MOCK_REWARDS_ACCOUNT_NAME,
+            CONF_HOST: MOCK_HOST,
+            CONF_PORT: MOCK_PORT,
         },
     )
     await hass.async_block_till_done()
 
     assert result2["type"] == FlowResultType.CREATE_ENTRY
-    assert result2["title"] == MOCK_REWARDS_ACCOUNT_NAME
+    assert result2["title"] == "Senertec Dachs"
     assert result2["data"] == {
-        CONF_API_KEY: MOCK_API_KEY,
-        CONF_REWARDS_ACCOUNT_NAME: MOCK_REWARDS_ACCOUNT_NAME,
+        CONF_HOST: MOCK_HOST,
+        CONF_PORT: MOCK_PORT,
     }
-    # Unique ID should be set to rewards account name
-    assert result2["result"].unique_id == MOCK_REWARDS_ACCOUNT_NAME
-
-
-async def test_config_flow_empty_api_key(hass: HomeAssistant):
-    """Test config flow with an empty API key."""
-    result = await hass.config_entries.flow.async_init(
-        DOMAIN, context={"source": config_entries.SOURCE_USER}
-    )
-    result2 = await hass.config_entries.flow.async_configure(
-        result["flow_id"],
-        {
-            CONF_API_KEY: "",
-            CONF_REWARDS_ACCOUNT_NAME: MOCK_REWARDS_ACCOUNT_NAME,
-        },
-    )
-    assert result2["type"] == FlowResultType.FORM
-    assert result2["errors"]["base"] == "invalid_api_key"
-
-
-async def test_config_flow_empty_rewards_name(hass: HomeAssistant):
-    """Test config flow with an empty rewards account name."""
-    result = await hass.config_entries.flow.async_init(
-        DOMAIN, context={"source": config_entries.SOURCE_USER}
-    )
-    result2 = await hass.config_entries.flow.async_configure(
-        result["flow_id"],
-        {
-            CONF_API_KEY: MOCK_API_KEY,
-            CONF_REWARDS_ACCOUNT_NAME: "",
-        },
-    )
-    assert result2["type"] == FlowResultType.FORM
-    assert result2["errors"]["base"] == "invalid_rewards_account_name"
 
 
 async def test_config_flow_already_configured(hass: HomeAssistant):
-    """Test config flow when an entry with the same unique ID (rewards account name) already exists."""
+    """Test config flow when an entry with the same unique ID (host) already exists."""
     # Create a mock entry first
     mock_entry = MockConfigEntry(
         domain=DOMAIN,
-        unique_id=MOCK_REWARDS_ACCOUNT_NAME,
+        unique_id=MOCK_HOST,
         data={
-            CONF_API_KEY: "another_key",
-            CONF_REWARDS_ACCOUNT_NAME: MOCK_REWARDS_ACCOUNT_NAME,
+            CONF_HOST: MOCK_HOST,
+            CONF_PORT: MOCK_PORT,
         },
-        title=MOCK_REWARDS_ACCOUNT_NAME,
+        title="Senertec Dachs",
     )
     mock_entry.add_to_hass(hass)
 
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
-    # Try to configure a new flow with the same rewards account name
+    # Try to configure a new flow with the same host
     result2 = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         {
-            CONF_API_KEY: MOCK_API_KEY,
-            CONF_REWARDS_ACCOUNT_NAME: MOCK_REWARDS_ACCOUNT_NAME,  # Same name
+            CONF_HOST: MOCK_HOST,
+            CONF_PORT: MOCK_PORT,
         },
     )
     assert result2["type"] == FlowResultType.ABORT

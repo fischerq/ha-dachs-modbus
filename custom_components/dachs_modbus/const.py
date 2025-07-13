@@ -1,3 +1,5 @@
-"""Constants for the new integration."""
+"""Constants for the Dachs Modbus integration."""
 
-DOMAIN = "new_integration"
+DOMAIN = "dachs_modbus"
+CONF_HOST = "host"
+CONF_PORT = "port"
