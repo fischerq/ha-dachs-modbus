@@ -15,19 +15,19 @@ _LOGGER = logging.getLogger(__name__)
 class DachsModbusDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass: HomeAssistant, client: DachsModbusApiClient) -> None:
+    def __init__(self, hass: HomeAssistant, client: DachsModbusApiClient, update_interval: int) -> None:
         """Initialize."""
         self.api = client
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(seconds=60),
+            update_interval=timedelta(seconds=update_interval),
         )
 
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.hass.async_to_executor(self.api.get_data)
+            return await self.hass.async_add_executor_job(self.api.get_data)
         except Exception as exception:
             raise UpdateFailed(exception) from exception

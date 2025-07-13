@@ -4,13 +4,15 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
-from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.data_entry_flow import FlowResultType
 
-from custom_components.dachs_modbus.const import DOMAIN
+from custom_components.dachs_modbus.const import DOMAIN, CONF_GLT_PIN
 
 MOCK_HOST = "1.2.3.4"
 MOCK_PORT = 502
+MOCK_GLT_PIN = "1234"
+MOCK_SCAN_INTERVAL = 60
 
 
 @pytest.fixture(autouse=True)
@@ -29,7 +31,7 @@ async def test_config_flow_user_step(hass: HomeAssistant):
     )
     assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "user"
-    assert result["errors"] is None
+    assert not result["errors"]
 
     # Test successful submission
     result2 = await hass.config_entries.flow.async_configure(
@@ -37,6 +39,8 @@ async def test_config_flow_user_step(hass: HomeAssistant):
         {
             CONF_HOST: MOCK_HOST,
             CONF_PORT: MOCK_PORT,
+            CONF_GLT_PIN: MOCK_GLT_PIN,
+            CONF_SCAN_INTERVAL: MOCK_SCAN_INTERVAL,
         },
     )
     await hass.async_block_till_done()
@@ -46,6 +50,8 @@ async def test_config_flow_user_step(hass: HomeAssistant):
     assert result2["data"] == {
         CONF_HOST: MOCK_HOST,
         CONF_PORT: MOCK_PORT,
+        CONF_GLT_PIN: MOCK_GLT_PIN,
+        CONF_SCAN_INTERVAL: MOCK_SCAN_INTERVAL,
     }
 
 
@@ -58,6 +64,8 @@ async def test_config_flow_already_configured(hass: HomeAssistant):
         data={
             CONF_HOST: MOCK_HOST,
             CONF_PORT: MOCK_PORT,
+            CONF_GLT_PIN: MOCK_GLT_PIN,
+            CONF_SCAN_INTERVAL: MOCK_SCAN_INTERVAL,
         },
         title="Senertec Dachs",
     )
@@ -72,6 +80,8 @@ async def test_config_flow_already_configured(hass: HomeAssistant):
         {
             CONF_HOST: MOCK_HOST,
             CONF_PORT: MOCK_PORT,
+            CONF_GLT_PIN: MOCK_GLT_PIN,
+            CONF_SCAN_INTERVAL: MOCK_SCAN_INTERVAL,
         },
     )
     assert result2["type"] == FlowResultType.ABORT

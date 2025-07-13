@@ -13,6 +13,19 @@ _Integration to connect the Senertec Dachs via Modbus._
 Platform | Description
 -- | --
 `sensor` | Show sensor values from the Senertec Dachs.
+`number` | Control the electrical power setpoint of the Senertec Dachs.
+`switch` | Block the Senertec Dachs via GLT.
+
+## Activation Requirements
+
+The integration's documentation (e.g., the README.md file) must clearly state the prerequisite steps the user must perform on the CHP's control panel:
+* Navigate to System > GLT Schnittstelle > GLT Einstellungen.
+* Set the parameter GLT-Schnittstelle aktiviert to Ja (Yes).
+* Note or set the GLT-Pin.
+* Navigate to Stromführung > Strombedarf über GLT.
+* Set the parameter Anforderung über externe Schnittstelle to Ein (On). This enables the unit to accept the power setpoint from the integration.
+
+**Warning:** Activating the GLT interface will cause the settings in the Freigabe Modul menu to be ignored.
 
 ## Installation
 

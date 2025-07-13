@@ -3,4 +3,5 @@ aiohttp
 pymodbus
 pytest-asyncio
 homeassistant
-pytest-homeassistant-custom-componentpymodbus>=3.6.3
+pytest-homeassistant-custom-component
+pymodbus>=3.6.3
