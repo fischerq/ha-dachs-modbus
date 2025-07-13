@@ -1,43 +1,49 @@
-# ha-dachs-modbus - Template Home Assistant Integration for ModbusTCP Devices
+# Senertec Dachs Modbus Integration for Home Assistant
 
-This repository provides a template for creating a Home Assistant integration to control and monitor devices using ModbusTCP.
+[![GitHub Release][releases-shield]][releases]
+[![GitHub Activity][commits-shield]][commits]
+[![License][license-shield]][license]
 
-## Setup
+[![hacs][hacs-shield]][hacs]
 
-1.  **Configure your ModbusTCP device.**\
-    Ensure your device is accessible on your network via ModbusTCP and note its IP address and port.
-1.  **Install the Integration (Template).**\
-    This integration is available through HACS (Home Assistant Community Store). Click the following button to add it to your Home Assistant: \
-    [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=dachs_modbus)\
-    \
-    Alternatively add it manually with the following steps:
-    1.  **Add this repository as a Custom Repository in HACS.**
-        *   In HACS, go to the Integrations tab.
-        *   Click on the three dots in the top right corner and select `Custom repositories`.
-        *   Enter the URL of this repository (`https://github.com/fischerq/ha-braiins-pool/`) and select the category `Integration`.
-        *   Click `Add`.
-    1.  **Install the integration (Template).**
-        *   Search for "Braiins Pool" in the HACS Integrations tab.
-        *   Click "Download" and restart Home Assistant.
-1.  **Add the Modbus TCP Device (Template) integration.**
-    *   Go to Settings -> Devices & Services -> Add Integration.
-    *   Search for "Modbus TCP Device (Template)" and select it.
-    *   Follow the configuration flow to set up your device.
+_Integration to connect the Senertec Dachs via Modbus._
 
-## Provided Entities
+**This integration will set up the following platforms.**
 
-This template provides examples for creating sensor entities. You will need to define the specific entities for your ModbusTCP device.
-## Implementation
+Platform | Description
+-- | --
+`sensor` | Show sensor values from the Senertec Dachs.
+`number` | Control the electrical power setpoint of the Senertec Dachs.
+`switch` | Block the Senertec Dachs via GLT.
 
-The files in `/custom_components/dachs_modbus/` provide the basic structure for a Home Assistant integration. You will need to modify these files to implement the specific functionality for your ModbusTCP device:
-\
-*   `__init__.py`: Integration entry point and setup.\
-*   `api.py`: Placeholder for ModbusTCP communication.\
-*   `config_flow.py`: Handles user configuration.\
-*   `const.py`: Defines constants.\
-\
-*   `coordinator.py`: Manages data updates.\
-\
-*   `manifest.json`: Integration metadata.\
-\
-*   `sensor.py`: Example sensor entity creation.
+## Activation Requirements
+
+The integration's documentation (e.g., the README.md file) must clearly state the prerequisite steps the user must perform on the CHP's control panel:
+* Navigate to System > GLT Schnittstelle > GLT Einstellungen.
+* Set the parameter GLT-Schnittstelle aktiviert to Ja (Yes).
+* Note or set the GLT-Pin.
+* Navigate to Stromführung > Strombedarf über GLT.
+* Set the parameter Anforderung über externe Schnittstelle to Ein (On). This enables the unit to accept the power setpoint from the integration.
+
+**Warning:** Activating the GLT interface will cause the settings in the Freigabe Modul menu to be ignored.
+
+## Installation
+
+1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
+2. If you do not have a `custom_components` directory (folder) there, you need to create it.
+3. In the `custom_components` directory (folder) create a new folder called `dachs_modbus`.
+4. Download all the files from the `custom_components/dachs_modbus/` directory (folder) in this repository.
+5. Place the files you downloaded in the new directory (folder) you created.
+6. Restart Home Assistant
+7. In the HA UI go to "Configuration" -> "Integrations" -> "Add Integration" and search for "Senertec Dachs Modbus"
+
+## Configuration is done in the UI
+
+[commits-shield]: https://img.shields.io/github/commit-activity/y/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
+[commits]: https://github.com/jules-agent/ha-dachs-modbus/commits/main
+[hacs]: https://hacs.xyz
+[hacs-shield]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
+[license]: https://github.com/jules-agent/ha-dachs-modbus/blob/main/LICENSE
+[license-shield]: https://img.shields.io/github/license/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
+[releases]: https://github.com/jules-agent/ha-dachs-modbus/releases

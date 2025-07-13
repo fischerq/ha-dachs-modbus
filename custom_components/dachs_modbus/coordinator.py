@@ -1,49 +1,33 @@
-"""Data update coordinator for the Braiins Pool integration."""
+"""Data update coordinator for the Senertec Dachs Modbus integration."""
 
+import logging
 from datetime import timedelta
+
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-import logging
 
-from .api import DeviceApiClient  # Replace with your API client class
-from .const import (
-    DOMAIN,
-    # Define constants for your integration
-)
+from .api import DachsModbusApiClient
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
 
-# Import the actual API client
-class BraiinsDataUpdateCoordinator(DataUpdateCoordinator[dict]):
-    """Coordinate updates from the Braiins Pool API."""
+class DachsModbusDataUpdateCoordinator(DataUpdateCoordinator):
+    """Class to manage fetching data from the API."""
 
-    def __init__(
-        self,
-        hass: HomeAssistant,  # Home Assistant instance
-        api_client: DeviceApiClient,  # Your API client instance
-        update_interval: timedelta,
-    ):
-        """Initialize the coordinator."""
+    def __init__(self, hass: HomeAssistant, client: DachsModbusApiClient, update_interval: int) -> None:
+        """Initialize."""
+        self.api = client
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=update_interval,
+            update_interval=timedelta(seconds=update_interval),
         )
-        self.api_client = api_client
 
-    async def _async_update_data(self) -> dict:
-        """Fetch data from the API."""
-        _LOGGER.debug("Fetching and processing data for %s integration.", DOMAIN)
-        processed_data: dict = {}
-
+    async def _async_update_data(self):
+        """Update data via library."""
         try:
-            # Fetch data from your device using the API client
-            # processed_data = await self.api_client.get_data()  # Replace with your API call
-            pass # Replace with actual data fetching and processing
-
-            return processed_data
-        except Exception as err:
-            _LOGGER.error("Error fetching or processing data from device: %s", err)
-            raise UpdateFailed(f"Error updating data: {err}")
+            return await self.hass.async_add_executor_job(self.api.get_data)
+        except Exception as exception:
+            raise UpdateFailed(exception) from exception
