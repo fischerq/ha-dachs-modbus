@@ -42,13 +42,12 @@ _LOGGER = logging.getLogger(__name__)
 class DachsModbusApiClient:
     """API client for Senertec Dachs Modbus."""
 
-    def __init__(self, host: str, port: int, glt_pin: str, scan_interval: int):
+    def __init__(self, host: str, port: int, glt_pin: str):
         """Initialize the API client."""
         self._host = host
         self._port = port
         self._glt_pin = glt_pin
-        self._scan_interval = scan_interval
-        self._client = ModbusTcpClient(host, port)
+        self._client = ModbusTcpClient(self._host, self._port)
         self._lock = threading.Lock()
         self._heartbeat_timer = None
         self._power_setpoint = 0

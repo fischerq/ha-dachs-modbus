@@ -22,7 +22,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         host=entry.data[CONF_HOST],
         port=entry.data[CONF_PORT],
         glt_pin=entry.data[CONF_GLT_PIN],
-        scan_interval=entry.data[CONF_SCAN_INTERVAL],
     )
 
     coordinator = DachsModbusDataUpdateCoordinator(
