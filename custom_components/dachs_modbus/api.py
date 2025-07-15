@@ -69,15 +69,21 @@ class DachsModbusApiClient:
             try:
                 data = {}
                 # Read all registers in one go
-                result = self._client.read_input_registers(address=8000, count=84, unit=1)
+                result = self._client.read_input_registers(
+                    address=8000, count=84, unit=1
+                )
                 if result.isError():
                     raise ConnectionException(f"Failed to read registers: {result}")
 
-                decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=Endian.Big)
+                decoder = BinaryPayloadDecoder.fromRegisters(
+                    result.registers, byteorder=Endian.Big
+                )
 
                 data[GLT_INTERFACE_VERSION] = decoder.decode_16bit_uint()
                 data[DEVICE_TYPE] = decoder.decode_16bit_uint()
-                data[SERIAL_NUMBER] = decoder.decode_string(20).rstrip(b'\x00').decode('utf-8')
+                data[SERIAL_NUMBER] = (
+                    decoder.decode_string(20).rstrip(b"\x00").decode("utf-8")
+                )
                 data[NOMINAL_POWER] = decoder.decode_16bit_uint()
                 data[UNIT_STATUS] = decoder.decode_16bit_uint()
                 data[ELECTRICAL_POWER] = decoder.decode_16bit_int() / 10
@@ -105,7 +111,7 @@ class DachsModbusApiClient:
                 data[BUFFER_TEMPERATURE_T2] = decoder.decode_16bit_int() / 10
                 data[BUFFER_TEMPERATURE_T3] = decoder.decode_16bit_int() / 10
                 data[BUFFER_TEMPERATURE_T4] = decoder.decode_16bit_int() / 10
-                decoder.skip_bytes(20) # Skip to 8056
+                decoder.skip_bytes(20)  # Skip to 8056
                 data[CURRENT_DISCHARGE_POWER] = decoder.decode_16bit_uint()
 
                 return data

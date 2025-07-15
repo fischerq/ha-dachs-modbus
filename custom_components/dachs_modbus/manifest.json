@@ -2,8 +2,8 @@
   "domain": "dachs_modbus",
   "name": "Dachs Modbus",
   "codeowners": [
-     "@fischerq"
-    ],
+    "@fischerq"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/fischerq/ha-dachs-modbus/README.md",
   "iot_class": "local_polling",

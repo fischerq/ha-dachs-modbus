@@ -17,10 +17,11 @@ async def test_successful_update(hass):
     mock_api_client = AsyncMock(spec=DachsModbusApiClient)
     mock_api_client.get_data.return_value = {"test": "data"}
 
-    with patch("homeassistant.core.HomeAssistant.async_add_executor_job", return_value={"test": "data"}):
-        coordinator = DachsModbusDataUpdateCoordinator(
-            hass, mock_api_client, 60
-        )
+    with patch(
+        "homeassistant.core.HomeAssistant.async_add_executor_job",
+        return_value={"test": "data"},
+    ):
+        coordinator = DachsModbusDataUpdateCoordinator(hass, mock_api_client, 60)
         await coordinator.async_refresh()
 
         assert coordinator.last_update_success is True
@@ -34,10 +35,11 @@ async def test_update_failed_api_error(hass):
     mock_api_client = AsyncMock(spec=DachsModbusApiClient)
     mock_api_client.get_data.side_effect = Exception("API Error")
 
-    with patch("homeassistant.core.HomeAssistant.async_add_executor_job", side_effect=Exception("API Error")):
-        coordinator = DachsModbusDataUpdateCoordinator(
-            hass, mock_api_client, 60
-        )
+    with patch(
+        "homeassistant.core.HomeAssistant.async_add_executor_job",
+        side_effect=Exception("API Error"),
+    ):
+        coordinator = DachsModbusDataUpdateCoordinator(hass, mock_api_client, 60)
         await coordinator.async_refresh()
 
         assert coordinator.last_update_success is False

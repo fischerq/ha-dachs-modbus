@@ -253,9 +253,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class DachsModbusSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Senertec Dachs Modbus sensor."""
 
-    def __init__(
-        self, coordinator, entity_description, config_entry
-    ):
+    def __init__(self, coordinator, entity_description, config_entry):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self.entity_description = entity_description

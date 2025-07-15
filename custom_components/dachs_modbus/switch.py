@@ -34,9 +34,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class DachsModbusSwitch(CoordinatorEntity, SwitchEntity):
     """Representation of a Senertec Dachs Modbus switch."""
 
-    def __init__(
-        self, coordinator, entity_description, config_entry
-    ):
+    def __init__(self, coordinator, entity_description, config_entry):
         """Initialize the switch."""
         super().__init__(coordinator)
         self.entity_description = entity_description
@@ -64,14 +62,10 @@ class DachsModbusSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the entity on."""
-        await self.hass.async_to_executor(
-            self.coordinator.api.set_block_chp, True
-        )
+        await self.hass.async_to_executor(self.coordinator.api.set_block_chp, True)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the entity off."""
-        await self.hass.async_to_executor(
-            self.coordinator.api.set_block_chp, False
-        )
+        await self.hass.async_to_executor(self.coordinator.api.set_block_chp, False)
         await self.coordinator.async_request_refresh()

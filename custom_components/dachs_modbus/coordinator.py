@@ -15,7 +15,9 @@ _LOGGER = logging.getLogger(__name__)
 class DachsModbusDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass: HomeAssistant, client: DachsModbusApiClient, update_interval: int) -> None:
+    def __init__(
+        self, hass: HomeAssistant, client: DachsModbusApiClient, update_interval: int
+    ) -> None:
         """Initialize."""
         self.api = client
         super().__init__(
