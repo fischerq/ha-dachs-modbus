@@ -1,43 +1,52 @@
-"""The modbus_template integration."""
+"""The Senertec Dachs Modbus integration."""
 
 from datetime import timedelta
 import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 
-from .coordinator import ModbusTemplateDataUpdateCoordinator
-from .modbus_api import ModbusApiClient
-from .const import DOMAIN, DEFAULT_SCAN_INTERVAL_SECS
+from .coordinator import DachsModbusDataUpdateCoordinator
+from .api import DachsModbusApiClient
+from .const import DOMAIN, CONF_GLT_PIN
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = timedelta(minutes=DEFAULT_SCAN_INTERVAL_MINS)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Braiins Pool from a config entry."""
- hass.data.setdefault(DOMAIN, {})
+    """Set up Senertec Dachs from a config entry."""
+    hass.data.setdefault(DOMAIN, {})
 
- api_client = ModbusApiClient(hass, entry.data)
+    client = DachsModbusApiClient(
+        host=entry.data[CONF_HOST],
+        port=entry.data[CONF_PORT],
+        glt_pin=entry.data[CONF_GLT_PIN],
+        scan_interval=entry.data[CONF_SCAN_INTERVAL],
+    )
 
- coordinator = ModbusTemplateDataUpdateCoordinator(
+    coordinator = DachsModbusDataUpdateCoordinator(
         hass,
-        api_client=api_client,
-        update_interval=SCAN_INTERVAL,
+        client=client,
+        update_interval=entry.data[CONF_SCAN_INTERVAL],
     )
 
     await coordinator.async_config_entry_first_refresh()
 
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(
+        entry, ["sensor", "number", "switch"]
+    )
 
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, ["sensor"])
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry, ["sensor", "number", "switch"]
+    )
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
     return unload_ok
