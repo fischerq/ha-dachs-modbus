@@ -45,6 +45,14 @@ from .const import (
     HEATING_WATER_PUMP_STATUS_MAP,
     CONTROL_STRATEGY_MAP,
     POWER_MODULATION_MAP,
+    SERIAL_NUMBER,
+    NOMINAL_POWER,
+    POWER_LEVEL,
+    MODULE_TYPE_DEFINITION,
+    OPERATING_HOURS_POWER_LEVEL_1,
+    OPERATING_HOURS_POWER_LEVEL_2,
+    OPERATING_HOURS_POWER_LEVEL_3,
+    CURRENT_DISCHARGE_POWER,
 )
 from .coordinator import DachsModbusDataUpdateCoordinator
 
@@ -182,6 +190,49 @@ SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key=POWER_MODULATION,
         name="Power Modulation",
+    ),
+    SensorEntityDescription(
+        key=SERIAL_NUMBER,
+        name="Serial Number",
+    ),
+    SensorEntityDescription(
+        key=NOMINAL_POWER,
+        name="Nominal Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+    ),
+    SensorEntityDescription(
+        key=POWER_LEVEL,
+        name="Power Level",
+    ),
+    SensorEntityDescription(
+        key=MODULE_TYPE_DEFINITION,
+        name="Module Type Definition",
+    ),
+    SensorEntityDescription(
+        key=OPERATING_HOURS_POWER_LEVEL_1,
+        name="Operating Hours Power Level 1",
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    SensorEntityDescription(
+        key=OPERATING_HOURS_POWER_LEVEL_2,
+        name="Operating Hours Power Level 2",
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    SensorEntityDescription(
+        key=OPERATING_HOURS_POWER_LEVEL_3,
+        name="Operating Hours Power Level 3",
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    SensorEntityDescription(
+        key=CURRENT_DISCHARGE_POWER,
+        name="Current Discharge Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
 )
 

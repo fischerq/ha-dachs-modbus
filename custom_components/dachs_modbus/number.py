@@ -65,6 +65,11 @@ class DachsModbusNumber(CoordinatorEntity, NumberEntity):
         """Return the state of the entity."""
         return self.coordinator.data.get(self.entity_description.key)
 
+    @property
+    def native_max_value(self) -> float:
+        """Return the maximum value."""
+        return self.coordinator.data.get("nominal_power")
+
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         await self.hass.async_to_executor(
