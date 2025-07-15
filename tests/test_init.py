@@ -58,7 +58,6 @@ async def test_async_setup_entry(
         host=MOCK_HOST,
         port=MOCK_PORT,
         glt_pin=MOCK_GLT_PIN,
-        scan_interval=MOCK_SCAN_INTERVAL,
     )
 
     # Check that coordinator is created and stored
