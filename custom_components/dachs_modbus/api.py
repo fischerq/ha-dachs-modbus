@@ -47,7 +47,7 @@ class DachsModbusApiClient:
         self._host = host
         self._port = port
         self._glt_pin = glt_pin
-        self._client = ModbusTcpClient(self._host, port=self._port)
+        self._client = ModbusTcpClient(host, port=port)
         self._lock = threading.Lock()
         self._heartbeat_timer = None
         self._power_setpoint = 0
