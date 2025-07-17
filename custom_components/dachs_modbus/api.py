@@ -69,9 +69,7 @@ class DachsModbusApiClient:
             try:
                 data = {}
                 # Read all registers in one go
-                result = self._client.read_input_registers(
-                    address=8000, count=84, unit=1
-                )
+                result = self._client.read_input_registers(address=8000, count=84)
                 if result.isError():
                     raise ConnectionException(f"Failed to read registers: {result}")
 
@@ -122,7 +120,7 @@ class DachsModbusApiClient:
     def _send_pin(self):
         """Send the GLT PIN to the device."""
         try:
-            self._client.write_register(address=8300, value=int(self._glt_pin), unit=1)
+            self._client.write_register(address=8300, value=int(self._glt_pin))
         except ConnectionException as e:
             _LOGGER.error("Failed to send GLT PIN: %s", e)
             raise
@@ -132,14 +130,14 @@ class DachsModbusApiClient:
         with self._lock:
             self._send_pin()
             self._power_setpoint = power
-            self._client.write_register(address=8301, value=power, unit=1)
+            self._client.write_register(address=8301, value=power)
             self._start_heartbeat()
 
     def set_block_chp(self, block: bool):
         """Block or unblock the CHP."""
         with self._lock:
             self._send_pin()
-            self._client.write_register(address=8302, value=1 if block else 0, unit=1)
+            self._client.write_register(address=8302, value=1 if block else 0)
 
     def _start_heartbeat(self):
         """Start the heartbeat timer."""
