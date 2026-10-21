@@ -39,11 +39,39 @@ The integration's documentation (e.g., the README.md file) must clearly state th
 
 ## Configuration is done in the UI
 
-[commits-shield]: https://img.shields.io/github/commit-activity/y/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
-[commits]: https://github.com/jules-agent/ha-dachs-modbus/commits/main
+[commits-shield]: https://img.shields.io/github/commit-activity/y/fischerq/ha-dachs-modbus.svg?style=for-the-badge
+[commits]: https://github.com/fischerq/ha-dachs-modbus/commits/main
 [hacs]: https://hacs.xyz
 [hacs-shield]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
-[license]: https://github.com/jules-agent/ha-dachs-modbus/blob/main/LICENSE
-[license-shield]: https://img.shields.io/github/license/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/jules-agent/ha-dachs-modbus.svg?style=for-the-badge
-[releases]: https://github.com/jules-agent/ha-dachs-modbus/releases
+[license]: https://github.com/fischerq/ha-dachs-modbus/blob/main/LICENSE
+[license-shield]: https://img.shields.io/github/license/fischerq/ha-dachs-modbus.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/fischerq/ha-dachs-modbus.svg?style=for-the-badge
+[releases]: https://github.com/fischerq/ha-dachs-modbus/releases
+
+## Verifying the register map
+
+The register layout (input registers 8000–8056; PIN 8300, power setpoint
+8301, block 8302) has **not yet been checked against Senertec's GLT
+documentation or a live unit**. Before using the controls, run the read-only
+probe from a machine on the same LAN and compare the values with the Dachs
+display (electrical power, buffer temperatures, operating hours):
+
+```bash
+pip install "pymodbus>=3.9.2"
+python3 scripts/probe.py 192.168.25.205
+```
+
+The probe never writes. Report mismatches with its output.
+
+Notes:
+- **Block CHP via GLT** and **Set Electrical Power** show the last value
+  this integration wrote (an assumed state). The GLT doesn't report them back.
+- A non-zero power setpoint is renewed every 5 minutes (heartbeat). Setting
+  it to 0 withdraws the request.
+
+## Development
+
+```bash
+pip install -r requirements.txt
+pytest tests && black --check .
+```

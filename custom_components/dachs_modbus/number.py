@@ -70,7 +70,7 @@ class DachsModbusNumber(CoordinatorEntity, NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
-        await self.hass.async_to_executor(
+        await self.hass.async_add_executor_job(
             self.coordinator.api.set_electrical_power, int(value)
         )
         await self.coordinator.async_request_refresh()

@@ -5,8 +5,11 @@
     "@fischerq"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/fischerq/ha-dachs-modbus/README.md",
+  "documentation": "https://github.com/fischerq/ha-dachs-modbus",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/fischerq/ha-dachs-modbus/issues",
-  "version": "0.1.3"
+  "version": "0.2.0",
+  "requirements": [
+    "pymodbus>=3.9.2"
+  ]
 }
